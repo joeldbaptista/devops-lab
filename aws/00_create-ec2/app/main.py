@@ -39,7 +39,9 @@ def run(iterations, sleep_seconds=SLEEP_SECONDS):
     for iteration in range(1, iterations + 1):
         timestamp = datetime.now(timezone.utc).isoformat(timespec="seconds")
         print(f"{iteration}/{iterations} {timestamp}", flush=True)
-		time.sleep(sleep_seconds)
+        # No sleep after the last timestamp, because nothing follows it.
+        if iteration < iterations:
+            time.sleep(sleep_seconds)
 
 
 def main(argv=None):
