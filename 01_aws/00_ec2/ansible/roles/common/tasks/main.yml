@@ -1,0 +1,17 @@
+---
+- name: Upgrade every installed package
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+    update_cache: true
+  when: upgrade_all_packages | bool
+
+- name: Install the fundamental utilities
+  ansible.builtin.dnf:
+    name: "{{ common_packages }}"
+    state: present
+    update_cache: true
+
+- name: Report what was installed
+  ansible.builtin.debug:
+    msg: "Utilities present: {{ common_packages | join(', ') }}"
