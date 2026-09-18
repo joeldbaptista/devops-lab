@@ -1,0 +1,9 @@
+---
+- name: Prepare the EC2 instance for running containers
+  hosts: ec2
+  become: true
+  gather_facts: true
+
+  roles:
+    - common
+    - docker
