@@ -1,0 +1,56 @@
+services:
+  # Experiment n. 1 - L4 load-balancer
+  lb_l4:
+    image: nginx:latest
+    container_name: lb_l4
+    volumes:
+      - ./l4/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8081:80"
+    depends_on:
+      - backend1
+      - backend2
+
+  backend1:
+    build: ./backend
+    container_name: backend1
+    environment:
+      - NAME=backend1
+
+  backend2:
+    build: ./backend
+    container_name: backend2
+    environment:
+      - NAME=backend2 
+
+  # Experiment n. 2 - L7 load-balancer
+  lb_l7:
+    image: nginx:latest
+    container_name: lb_l7
+    volumes:
+      - ./l7/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8082:80"
+    depends_on:
+      - v1_server
+      - v2_server
+      - static_server
+
+  v1_server:
+    build: ./backend
+    container_name: v1_server
+    environment:
+      - NAME=v1_server
+
+  v2_server:
+    build: ./backend
+    container_name: v2_server
+    environment:
+      - NAME=v2_server
+
+  static_server:
+    build: ./backend
+    container_name: static_server
+    environment:
+      - NAME=static_server
+
